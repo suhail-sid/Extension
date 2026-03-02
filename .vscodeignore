@@ -1,0 +1,14 @@
+.vscode/**
+src/**
+scripts/**
+node_modules/**
+**/*.ts
+**/*.map
+tsconfig.json
+.gitignore
+README-assets/**
+media/orient-check.png
+media/cat-*.gif
+media/cat-pets-*.gif
+media/cat-pro-*.gif
+media/cat-vspets-*.gif

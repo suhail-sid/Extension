@@ -1,0 +1,410 @@
+{
+  "name": "pet-cursor",
+  "displayName": "Pet Cursor",
+  "description": "Animated cursor pets that walk, run, jump, and fly while you type.",
+  "version": "0.0.1",
+  "publisher": "local-dev",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Other",
+    "Programming Languages"
+  ],
+  "activationEvents": [
+    "onStartupFinished",
+    "onCommand:catCursor.toggle",
+    "onCommand:catCursor.reloadAssets",
+    "onCommand:catCursor.selectPet"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "commands": [
+      {
+        "command": "catCursor.toggle",
+        "title": "Pet Cursor: Toggle"
+      },
+      {
+        "command": "catCursor.reloadAssets",
+        "title": "Pet Cursor: Reload Assets"
+      },
+      {
+        "command": "catCursor.selectPet",
+        "title": "Pet Cursor: Select Pet"
+      }
+    ],
+    "configuration": {
+      "title": "Pet Cursor",
+      "properties": {
+        "catCursor.symbol": {
+          "type": "string",
+          "default": "cat",
+          "description": "Fallback symbol used if GIFs cannot be loaded."
+        },
+        "catCursor.petType": {
+          "type": "string",
+          "default": "cat",
+          "enum": [
+            "cat",
+            "dog",
+            "fox",
+            "bunny",
+            "chicken",
+            "cockatiel",
+            "crab",
+            "frog",
+            "horse",
+            "mod",
+            "morph",
+            "panda",
+            "rat",
+            "rocky",
+            "rubber-duck",
+            "skeleton",
+            "snail",
+            "snake",
+            "squirrel",
+            "totoro",
+            "turtle",
+            "zappy",
+            "clippy",
+            "deno"
+          ],
+          "description": "Pet type used by the cursor overlay. Birds (cockatiel/chicken) use fly motion on line changes."
+        },
+        "catCursor.leftOffset": {
+          "type": "string",
+          "default": "0.01ch",
+          "description": "Horizontal offset for cat placement. Positive moves cat to the right."
+        },
+        "catCursor.verticalOffset": {
+          "type": "string",
+          "default": "-0.26em",
+          "description": "Top offset for line alignment. Negative moves cat up onto the text line."
+        },
+        "catCursor.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable cat cursor automatically on startup."
+        },
+        "catCursor.minimizeNativeCursor": {
+          "type": "boolean",
+          "default": true,
+          "description": "Use a very thin native cursor so the cat overlay feels like the primary cursor."
+        },
+        "catCursor.disableNativeBlinking": {
+          "type": "boolean",
+          "default": true,
+          "description": "Force native cursor to solid (non-blinking) while extension is enabled."
+        },
+        "catCursor.hideNativeCursorColor": {
+          "type": "boolean",
+          "default": true,
+          "description": "Attempt to hide native cursor by setting editor cursor color transparent."
+        },
+        "catCursor.sitGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-sit.gif",
+          "description": "Path to GIF shown when idle. Relative paths are resolved from the extension folder."
+        },
+        "catCursor.wakeUpGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-wakeup.gif",
+          "description": "Path to GIF shown briefly when typing starts (standing up)."
+        },
+        "catCursor.standRightGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-stand-right.gif",
+          "description": "Path to standing GIF facing right while waiting for input."
+        },
+        "catCursor.standLeftGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-stand-left.gif",
+          "description": "Path to standing GIF facing left while looking around."
+        },
+        "catCursor.jumpUpGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-jump-up.gif",
+          "description": "Path to jump-up GIF shown when cursor moves to a higher line."
+        },
+        "catCursor.jumpDownGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-jump-down.gif",
+          "description": "Path to jump-down GIF shown when cursor moves to a lower line."
+        },
+        "catCursor.flyUpGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-fly-up.gif",
+          "description": "Path to fly-up GIF used by flying pets when cursor moves to a higher line."
+        },
+        "catCursor.flyDownGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-fly-down.gif",
+          "description": "Path to fly-down GIF used by flying pets when cursor moves to a lower line."
+        },
+        "catCursor.walkGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-walk-right.gif",
+          "description": "Legacy/compat path for right-facing walk GIF."
+        },
+        "catCursor.walkRightGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-walk-right.gif",
+          "description": "Path to right-facing walk GIF."
+        },
+        "catCursor.walkLookBackGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-walk-right-lookback.gif",
+          "description": "Path to forward-moving walk GIF where only the face looks backward."
+        },
+        "catCursor.walkLeftGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-walk-left.gif",
+          "description": "Path to left-facing walk GIF."
+        },
+        "catCursor.runGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-run-right.gif",
+          "description": "Legacy/compat path for right-facing run GIF."
+        },
+        "catCursor.runRightGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-run-right.gif",
+          "description": "Path to right-facing run GIF."
+        },
+        "catCursor.runLookBackGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-run-right-lookback.gif",
+          "description": "Path to forward-moving run GIF where only the face looks backward."
+        },
+        "catCursor.runLeftGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-run-left.gif",
+          "description": "Path to left-facing run GIF."
+        },
+        "catCursor.deleteGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-backspace-left.gif",
+          "description": "Legacy/compat path for left-facing backspace walk GIF."
+        },
+        "catCursor.backspaceLeftGifPath": {
+          "type": "string",
+          "default": "media/pet-cat-backspace-left.gif",
+          "description": "Path to left-facing walking GIF used during backspace."
+        },
+        "catCursor.spriteWidthEm": {
+          "type": "number",
+          "default": 0.34,
+          "minimum": 0.16,
+          "maximum": 0.8,
+          "description": "Displayed GIF width in em units."
+        },
+        "catCursor.spriteHeightEm": {
+          "type": "number",
+          "default": 0.24,
+          "minimum": 0.14,
+          "maximum": 0.6,
+          "description": "Displayed GIF height in em units."
+        },
+        "catCursor.fitToLineHeight": {
+          "type": "boolean",
+          "default": true,
+          "description": "Scale cat height to match the editor line height."
+        },
+        "catCursor.lineHeightScale": {
+          "type": "number",
+          "default": 0.28,
+          "minimum": 0.1,
+          "maximum": 0.9,
+          "description": "Multiplier for line-height based sizing."
+        },
+        "catCursor.spriteAspectRatio": {
+          "type": "number",
+          "default": 1.1,
+          "minimum": 0.6,
+          "maximum": 2.2,
+          "description": "Width/height ratio used when fitting sprite to line height."
+        },
+        "catCursor.idleDelayMs": {
+          "type": "number",
+          "default": 350,
+          "minimum": 100,
+          "description": "Milliseconds after typing stops before cat sits."
+        },
+        "catCursor.runThresholdCps": {
+          "type": "number",
+          "default": 4.5,
+          "minimum": 0.5,
+          "description": "Typing speed in chars/sec above which cat runs."
+        },
+        "catCursor.runWordThreshold": {
+          "type": "number",
+          "default": 4,
+          "minimum": 1,
+          "description": "Number of completed words typed in a burst before cat switches to run."
+        },
+        "catCursor.activeTypingWindowMs": {
+          "type": "number",
+          "default": 220,
+          "minimum": 80,
+          "description": "Milliseconds after last keypress considered part of active typing."
+        },
+        "catCursor.wakeUpDurationMs": {
+          "type": "number",
+          "default": 260,
+          "minimum": 80,
+          "description": "Milliseconds for stand-up animation when typing starts."
+        },
+        "catCursor.idleStandMs": {
+          "type": "number",
+          "default": 2600,
+          "minimum": 100,
+          "description": "Idle wait duration where cat stands and watches the user."
+        },
+        "catCursor.idlePatrolMs": {
+          "type": "number",
+          "default": 5200,
+          "minimum": 100,
+          "description": "Idle duration spent walking left/right to attract attention before sitting."
+        },
+        "catCursor.patrolFlipMs": {
+          "type": "number",
+          "default": 700,
+          "minimum": 120,
+          "description": "Milliseconds between patrol direction flips."
+        },
+        "catCursor.patrolStepsPerSide": {
+          "type": "number",
+          "default": 3,
+          "minimum": 1,
+          "description": "How many walk steps the cat takes in one direction before turning during idle patrol."
+        },
+        "catCursor.idleWanderCh": {
+          "type": "number",
+          "default": 1.2,
+          "minimum": 0,
+          "maximum": 6,
+          "description": "Horizontal distance (in ch) the cat roams away from cursor during idle patrol."
+        },
+        "catCursor.standLookFlipMs": {
+          "type": "number",
+          "default": 1300,
+          "minimum": 200,
+          "description": "Milliseconds between left/right standing look changes."
+        },
+        "catCursor.stateRefreshIntervalMs": {
+          "type": "number",
+          "default": 120,
+          "minimum": 50,
+          "description": "How often the extension checks if the cat should switch state."
+        },
+        "catCursor.deleteTurnMs": {
+          "type": "number",
+          "default": 280,
+          "minimum": 80,
+          "description": "Milliseconds to keep the left-facing backspace look animation after deletion."
+        },
+        "catCursor.backspaceRunHoldMs": {
+          "type": "number",
+          "default": 380,
+          "minimum": 120,
+          "description": "How long backspace must be held before delete animation can switch from walk to run."
+        },
+        "catCursor.backspaceRunThresholdCps": {
+          "type": "number",
+          "default": 9,
+          "minimum": 1,
+          "description": "Delete speed (chars/sec) needed to trigger backspace run once hold time is met."
+        },
+        "catCursor.navigationMoveMs": {
+          "type": "number",
+          "default": 220,
+          "minimum": 80,
+          "description": "Milliseconds to show left/right walk motion after keyboard cursor movement."
+        },
+        "catCursor.navigationFaceMs": {
+          "type": "number",
+          "default": 420,
+          "minimum": 120,
+          "description": "Milliseconds to keep cat facing navigation direction after cursor movement."
+        },
+        "catCursor.jumpBaseMs": {
+          "type": "number",
+          "default": 240,
+          "minimum": 120,
+          "description": "Base jump animation duration when moving across lines."
+        },
+        "catCursor.jumpPerLineMs": {
+          "type": "number",
+          "default": 0,
+          "minimum": 0,
+          "description": "Extra jump duration added per line crossed."
+        },
+        "catCursor.jumpMaxMs": {
+          "type": "number",
+          "default": 240,
+          "minimum": 120,
+          "description": "Maximum jump duration cap for long line-distance jumps."
+        },
+        "catCursor.showBlinkCaret": {
+          "type": "boolean",
+          "default": true,
+          "description": "Show a blinking caret marker at the exact cursor position while cat overlay is active."
+        },
+        "catCursor.blinkCaretIntervalMs": {
+          "type": "number",
+          "default": 520,
+          "minimum": 120,
+          "description": "Blink interval in milliseconds for the caret marker."
+        },
+        "catCursor.blinkCaretSymbol": {
+          "type": "string",
+          "default": "|",
+          "description": "Character used for the blinking caret marker."
+        },
+        "catCursor.blinkCaretVerticalOffset": {
+          "type": "string",
+          "default": "0em",
+          "description": "Vertical margin offset for the blinking caret marker."
+        }
+      }
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "generate:gifs": "python scripts/generate_pets_from_vscode_pets.py",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "lint": "echo \"No lint configured\"",
+    "generate:gifs:cat": "python scripts/generate_from_vscode_pets.py",
+    "package:vsix": "npx @vscode/vsce package",
+    "publish:patch": "npx @vscode/vsce publish patch",
+    "publish:minor": "npx @vscode/vsce publish minor"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.24",
+    "@types/vscode": "^1.85.0",
+    "typescript": "^5.3.3"
+  },
+  "icon": "media/marketplace-icon.png",
+  "keywords": [
+    "cursor",
+    "pets",
+    "animation",
+    "typing",
+    "fun"
+  ],
+  "galleryBanner": {
+    "color": "#1e1e1e",
+    "theme": "dark"
+  },
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/your-username/pet-cursor"
+  },
+  "homepage": "https://github.com/your-username/pet-cursor#readme",
+  "bugs": {
+    "url": "https://github.com/your-username/pet-cursor/issues"
+  }
+}
