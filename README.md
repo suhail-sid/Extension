@@ -112,7 +112,7 @@ VS Code does not expose an API to fully replace the native caret, so this extens
 1. Create a publisher at `https://marketplace.visualstudio.com/manage/publishers/`.
 2. Create an Azure DevOps Personal Access Token with Marketplace publish/manage scope.
 3. Set your publisher id in `package.json` (`publisher` field).
-4. Optionally update repository/homepage/bugs URLs in `package.json`.
+4. Repository/homepage/bugs in `package.json` now point to `https://github.com/suhail-sid/Extension`.
 5. Package:
    ```powershell
    npm run package:vsix
@@ -122,3 +122,4 @@ VS Code does not expose an API to fully replace the native caret, so this extens
    npx @vscode/vsce login <your-publisher-id>
    npm run publish:patch
    ```
+

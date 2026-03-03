@@ -401,10 +401,10 @@
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/your-username/pet-cursor"
+    "url": "https://github.com/suhail-sid/Extension"
   },
-  "homepage": "https://github.com/your-username/pet-cursor#readme",
+  "homepage": "https://github.com/suhail-sid/Extension#readme",
   "bugs": {
-    "url": "https://github.com/your-username/pet-cursor/issues"
+    "url": "https://github.com/suhail-sid/Extension/issues"
   }
 }
