@@ -3,7 +3,7 @@
   "displayName": "Pet Cursor",
   "description": "Animated cursor pets that walk, run, jump, and fly while you type.",
   "version": "0.0.1",
-  "publisher": "local-dev",
+  "publisher": "suhailsiddiqui",
   "engines": {
     "vscode": "^1.85.0"
   },
